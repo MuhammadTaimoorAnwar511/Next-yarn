@@ -63,7 +63,7 @@ jobs:
           STEP="Installing dependencies"
           echo "📦 Installing dependencies via ${{ env.PACKAGE_MANAGER }}..."
           if [[ "${{ env.PACKAGE_MANAGER }}" == "yarn" ]]; then
-            yarn install
+            yarn install --immutable
           else
             npm install
           fi
