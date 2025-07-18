@@ -22,14 +22,27 @@ jobs:
         with:
           clean: false
 
-      - name: Setup Node.js ${{ env.NODE_VERSION }}
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "${{ env.NODE_VERSION }}"
+          node-version: ${{ env.NODE_VERSION }}
       
-      - name: Install Yarn (if selected)
-        if: ${{ env.PACKAGE_MANAGER == 'yarn' }}
-        run: npm install -g yarn
+      - name: Ensure yarn, pm2, and serve are installed
+        run: |
+          if ! command -v yarn &> /dev/null; then
+            echo "Installing yarn..."
+            npm install -g yarn
+          fi
+      
+          if ! command -v pm2 &> /dev/null; then
+            echo "Installing pm2..."
+            npm install -g pm2
+          fi
+      
+          if ! command -v serve &> /dev/null; then
+            echo "Installing serve..."
+            npm install -g serve
+          fi
 
       - name: Install dependencies
         run: |
