@@ -1,4 +1,4 @@
-name: Deploying ${{ env.BRANCH_NAME }} Branch
+name: Deploying main Branch
 
 on:
   push:
