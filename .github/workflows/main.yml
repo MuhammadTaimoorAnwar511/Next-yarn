@@ -26,6 +26,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "${{ env.NODE_VERSION }}"
+      
+      - name: Install Yarn (if selected)
+        if: ${{ env.PACKAGE_MANAGER == 'yarn' }}
+        run: npm install -g yarn
 
       - name: Install dependencies
         run: |
