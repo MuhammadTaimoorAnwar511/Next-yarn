@@ -3,8 +3,7 @@ name: Deploying ${{ env.BRANCH_NAME }} Branch
 on:
   push:
     branches:
-      - ${{ env.BRANCH_NAME }}
-
+      - main
 env:
   # === Change only these values ===
   BRANCH_NAME: "main"
