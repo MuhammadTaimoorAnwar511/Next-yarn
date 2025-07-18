@@ -1,0 +1,51 @@
+name: Deploying ${{ env.BRANCH_NAME }} Branch
+
+on:
+  push:
+    branches:
+      - ${{ env.BRANCH_NAME }}
+
+env:
+  # === Change only these values ===
+  BRANCH_NAME: "main"
+  RUNNER_NAME: "taimoor-vm"
+  PROCESS_NAME: "Next-Yarn"
+  PACKAGE_MANAGER: "yarn"         # or "yarn"
+  NODE_VERSION: "20"
+
+jobs:
+  deploy:
+    runs-on: ${{ format('["self-hosted", "{0}"]', env.RUNNER_NAME) }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          clean: false
+
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: "${{ env.NODE_VERSION }}"
+
+      - name: Install dependencies
+        run: |
+          if [ "${{ env.PACKAGE_MANAGER }}" = "yarn" ]; then
+            yarn install --ignore-engines
+          else
+            npm install --legacy-peer-deps
+          fi
+
+      - name: Start or Reload Application with PM2
+        run: |
+          if pm2 list | grep -q "${{ env.PROCESS_NAME }}"; then
+            echo "Reloading PM2 process: ${{ env.PROCESS_NAME }}"
+            pm2 reload "${{ env.PROCESS_NAME }}"
+          else
+            echo "Starting new PM2 process: ${{ env.PROCESS_NAME }}"
+            if [ "${{ env.PACKAGE_MANAGER }}" = "yarn" ]; then
+              pm2 start "yarn start" --name "${{ env.PROCESS_NAME }}"
+            else
+              pm2 start "npm start" --name "${{ env.PROCESS_NAME }}"
+            fi
+          fi
