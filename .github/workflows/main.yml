@@ -13,8 +13,8 @@ env:
   NODE_VERSION: "20"
 
 jobs:
-  deploy:
-    runs-on: ${{ format('["self-hosted", "{0}"]', env.RUNNER_NAME) }}
+  deploy:    
+    runs-on: [self-hosted,taimoor-vm] 
 
     steps:
       - name: Checkout code
