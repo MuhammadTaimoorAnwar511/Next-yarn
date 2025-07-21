@@ -6,6 +6,8 @@ First, run the development server:
 ### `yarn install`
 ### `yarn build`
 ### `PORT=3000 pm2 start "yarn start" --name "next-yarn"`
+### `docker build -t <image name> .`
+### `docker run -d -p <host port>:<container port> --name <container name> <image name>`
 ```bash
 npm run dev
 # or
